@@ -1,0 +1,14 @@
+# Redirects for Single Page Application routes
+/*    /index.html   200
+
+# Redirect admin routes
+/admin    /admin-login.html   200
+/dashboard    /admin-dashboard.html   200
+
+# Redirect user routes  
+/login    /user-login.html   200
+/register    /user-register.html   200
+/student    /user-dashboard.html   200
+
+# Handle 404s
+/*    /index.html   404

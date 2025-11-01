@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Fee Payment Queue</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Admin Dashboard</h1>
+            <div class="admin-controls">
+                <span>Welcome, Admin</span>
+                <button id="refreshQueue" class="btn btn-secondary">Refresh Queue</button>
+                <button id="adminLogoutBtn" class="btn btn-danger">Logout</button>
+            </div>
+        </header>
+        
+        <main class="admin-content">
+            <div class="queue-stats">
+                <div class="stat-card">
+                    <h3 id="totalRequests">0</h3>
+                    <p>Total Requests</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="pendingRequests">0</h3>
+                    <p>Pending</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="completedRequests">0</h3>
+                    <p>Completed</p>
+                </div>
+            </div>
+            
+            <div class="queue-management">
+                <h2>Fee Payment Queue</h2>
+                
+                <div id="emptyQueue" class="empty-state">
+                    <p>No fee payment requests at the moment.</p>
+                </div>
+                
+                <div id="queueList" class="queue-list">
+                    <!-- Queue items will be dynamically populated here -->
+                </div>
+            </div>
+            
+            <div class="admin-actions">
+                <h3>Quick Actions</h3>
+                <button id="notifyNextBtn" class="btn btn-primary" disabled>Call Next Student</button>
+                <button id="clearCompletedBtn" class="btn btn-secondary">Clear Completed</button>
+            </div>
+        </main>
+    </div>
+    
+    <script src="queue-manager.js"></script>
+    <script src="admin-auth.js"></script>
+    <script src="admin-dashboard.js"></script>
+</body>
+</html>

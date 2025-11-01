@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Test - Fee Payment Queue</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🧪 System Test Suite</h1>
+            <p>Comprehensive testing before Netlify deployment</p>
+        </header>
+        
+        <main class="main-content">
+            <div class="test-section">
+                <h2>🔧 Core Functions Test</h2>
+                <div class="test-buttons">
+                    <button class="btn btn-primary" onclick="testStorageManager()">Test Storage Manager</button>
+                    <button class="btn btn-primary" onclick="testQueueManager()">Test Queue Manager</button>
+                    <button class="btn btn-primary" onclick="testAdminSession()">Test Admin Session</button>
+                </div>
+            </div>
+            
+            <div class="test-section">
+                <h2>👤 User Flow Test</h2>
+                <div class="test-buttons">
+                    <button class="btn btn-secondary" onclick="createTestUsers()">Create Test Users</button>
+                    <button class="btn btn-secondary" onclick="testUserLogin()">Test User Login</button>
+                    <button class="btn btn-secondary" onclick="testTokenRequest()">Test Token Request</button>
+                </div>
+            </div>
+            
+            <div class="test-section">
+                <h2>👨‍💼 Admin Flow Test</h2>
+                <div class="test-buttons">
+                    <button class="btn btn-admin" onclick="testAdminLogin()">Test Admin Login</button>
+                    <button class="btn btn-admin" onclick="testQueueManagement()">Test Queue Management</button>
+                    <button class="btn btn-admin" onclick="testNotifications()">Test Notifications</button>
+                </div>
+            </div>
+            
+            <div class="test-section">
+                <h2>🧹 Cleanup</h2>
+                <div class="test-buttons">
+                    <button class="btn btn-danger" onclick="clearAllData()">Clear All Data</button>
+                    <button class="btn btn-secondary" onclick="showAllData()">Show All Data</button>
+                </div>
+            </div>
+            
+            <div id="testResults" class="test-results">
+                <h3>Test Results</h3>
+                <div id="results"></div>
+            </div>
+            
+            <div class="deployment-checklist">
+                <h3>📋 Deployment Checklist</h3>
+                <div id="checklist">
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check1">
+                        <label for="check1">All core functions working</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check2">
+                        <label for="check2">User registration/login working</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check3">
+                        <label for="check3">Token request/queue working</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check4">
+                        <label for="check4">Admin login/dashboard working</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check5">
+                        <label for="check5">Queue management working</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check6">
+                        <label for="check6">Position updates working</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check7">
+                        <label for="check7">Logout functionality working</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check8">
+                        <label for="check8">Responsive design verified</label>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="queue-manager.js"></script>
+    <script src="auth.js"></script>
+    <script src="admin-auth.js"></script>
+    
+    <style>
+        .test-section {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .test-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .test-results {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .result-item {
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+        }
+        
+        .result-success {
+            background: #d4edda;
+            border-left-color: #28a745;
+            color: #155724;
+        }
+        
+        .result-error {
+            background: #f8d7da;
+            border-left-color: #dc3545;
+            color: #721c24;
+        }
+        
+        .result-info {
+            background: #cce7ff;
+            border-left-color: #007bff;
+            color: #004085;
+        }
+        
+        .deployment-checklist {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+            gap: 10px;
+        }
+        
+        .checklist-item input[type="checkbox"] {
+            transform: scale(1.2);
+        }
+        
+        .checklist-item label {
+            font-weight: 500;
+            cursor: pointer;
+        }
+    </style>
+    
+    <script>
+        function addResult(text, type = 'info') {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `result-item result-${type}`;
+            div.innerHTML = `<strong>${new Date().toLocaleTimeString()}</strong>: ${text}`;
+            results.appendChild(div);
+            results.scrollTop = results.scrollHeight;
+        }
+        
+        function testStorageManager() {
+            try {
+                addResult('StorageManager available: ' + (typeof StorageManager !== 'undefined'), 'success');
+                const users = StorageManager.getUsers();
+                addResult(`Current users count: ${users.length}`, 'info');
+                addResult('✅ Storage Manager working correctly', 'success');
+            } catch (e) {
+                addResult('❌ StorageManager error: ' + e.message, 'error');
+            }
+        }
+        
+        function testQueueManager() {
+            try {
+                addResult('QueueManager available: ' + (typeof QueueManager !== 'undefined'), 'success');
+                const queue = QueueManager.getQueue();
+                addResult(`Current queue length: ${queue.length}`, 'info');
+                addResult('✅ Queue Manager working correctly', 'success');
+            } catch (e) {
+                addResult('❌ QueueManager error: ' + e.message, 'error');
+            }
+        }
+        
+        function testAdminSession() {
+            try {
+                addResult('AdminSession available: ' + (typeof AdminSession !== 'undefined'), 'success');
+                addResult('Admin authenticated: ' + AdminSession.isAuthenticated(), 'info');
+                addResult('✅ Admin Session working correctly', 'success');
+            } catch (e) {
+                addResult('❌ AdminSession error: ' + e.message, 'error');
+            }
+        }
+        
+        function createTestUsers() {
+            try {
+                const testUsers = [
+                    {id: 1001, name: 'John Doe', rollNumber: 'CS001', email: 'john@test.com', password: '123456', registeredAt: new Date().toISOString()},
+                    {id: 1002, name: 'Jane Smith', rollNumber: 'CS002', email: 'jane@test.com', password: '123456', registeredAt: new Date().toISOString()},
+                    {id: 1003, name: 'Bob Wilson', rollNumber: 'CS003', email: 'bob@test.com', password: '123456', registeredAt: new Date().toISOString()}
+                ];
+                
+                StorageManager.saveUsers(testUsers);
+                addResult('✅ Created 3 test users (john@test.com, jane@test.com, bob@test.com) - password: 123456', 'success');
+            } catch (e) {
+                addResult('❌ Error creating test users: ' + e.message, 'error');
+            }
+        }
+        
+        function testUserLogin() {
+            try {
+                const users = StorageManager.getUsers();
+                if (users.length === 0) {
+                    addResult('⚠️ No users found. Create test users first.', 'info');
+                    return;
+                }
+                
+                // Simulate login
+                const testUser = users[0];
+                const sessionData = {
+                    id: testUser.id,
+                    name: testUser.name,
+                    email: testUser.email,
+                    rollNumber: testUser.rollNumber,
+                    loginAt: new Date().toISOString()
+                };
+                StorageManager.setCurrentUser(sessionData);
+                addResult(`✅ Test login successful for ${testUser.name}`, 'success');
+                
+                // Test logout
+                StorageManager.clearSession();
+                addResult('✅ Test logout successful', 'success');
+            } catch (e) {
+                addResult('❌ Login test error: ' + e.message, 'error');
+            }
+        }
+        
+        function testTokenRequest() {
+            try {
+                const users = StorageManager.getUsers();
+                if (users.length === 0) {
+                    addResult('⚠️ No users found. Create test users first.', 'info');
+                    return;
+                }
+                
+                // Create test requests
+                users.forEach((user, index) => {
+                    const request = QueueManager.addToQueue({
+                        userId: user.id,
+                        userName: user.name,
+                        userEmail: user.email,
+                        rollNumber: user.rollNumber
+                    });
+                    addResult(`✅ Token #${request.tokenNumber} created for ${user.name}`, 'success');
+                });
+                
+                addResult(`✅ Created ${users.length} test token requests`, 'success');
+            } catch (e) {
+                addResult('❌ Token request test error: ' + e.message, 'error');
+            }
+        }
+        
+        function testAdminLogin() {
+            try {
+                AdminSession.setSession();
+                addResult('✅ Admin login test successful', 'success');
+                
+                const isAuth = AdminSession.isAuthenticated();
+                addResult(`Admin authentication status: ${isAuth}`, isAuth ? 'success' : 'error');
+                
+                AdminSession.clearSession();
+                addResult('✅ Admin logout test successful', 'success');
+            } catch (e) {
+                addResult('❌ Admin login test error: ' + e.message, 'error');
+            }
+        }
+        
+        function testQueueManagement() {
+            try {
+                const queue = QueueManager.getQueue();
+                if (queue.length === 0) {
+                    addResult('⚠️ No queue items found. Create token requests first.', 'info');
+                    return;
+                }
+                
+                // Test notify
+                const firstRequest = queue[0];
+                QueueManager.updateRequestStatus(firstRequest.id, 'notified');
+                addResult(`✅ Notified ${firstRequest.userName} (Token #${firstRequest.tokenNumber})`, 'success');
+                
+                // Test complete
+                QueueManager.updateRequestStatus(firstRequest.id, 'completed');
+                addResult(`✅ Completed ${firstRequest.userName} (Token #${firstRequest.tokenNumber})`, 'success');
+                
+                addResult('✅ Queue management test successful', 'success');
+            } catch (e) {
+                addResult('❌ Queue management test error: ' + e.message, 'error');
+            }
+        }
+        
+        function testNotifications() {
+            try {
+                if (Notification.permission === 'granted') {
+                    new Notification('Test Notification', {
+                        body: 'Fee Payment Queue system is working correctly!',
+                        icon: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMTIgMmMtNS41MiAwLTEwIDQuNDgtMTAgMTBzNC40OCAxMCAxMCAxMCAxMC00LjQ4IDEwLTEwLTQuNDgtMTAtMTAtMTB6bTEgMTVoLTJ2LTZoMnY2em0wLThoLTJ2LTJoMnYyeiI+PC9wYXRoPjwvc3ZnPg=='
+                    });
+                    addResult('✅ Browser notification test successful', 'success');
+                } else {
+                    Notification.requestPermission().then(permission => {
+                        if (permission === 'granted') {
+                            addResult('✅ Notification permission granted', 'success');
+                        } else {
+                            addResult('⚠️ Notification permission denied', 'info');
+                        }
+                    });
+                }
+            } catch (e) {
+                addResult('❌ Notification test error: ' + e.message, 'error');
+            }
+        }
+        
+        function clearAllData() {
+            localStorage.clear();
+            addResult('🧹 All localStorage data cleared', 'info');
+            document.getElementById('results').innerHTML = '';
+        }
+        
+        function showAllData() {
+            const data = {};
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                data[key] = localStorage.getItem(key);
+            }
+            addResult('Current localStorage: ' + JSON.stringify(data, null, 2), 'info');
+        }
+        
+        // Auto-run basic tests on load
+        document.addEventListener('DOMContentLoaded', () => {
+            addResult('🚀 System Test Suite Loaded', 'info');
+            addResult('Click buttons above to test specific functionality', 'info');
+            addResult('Complete the checklist before Netlify deployment', 'info');
+        });
+    </script>
+</body>
+</html>

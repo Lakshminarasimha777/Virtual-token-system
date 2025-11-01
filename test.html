@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test System</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-button { padding: 10px 20px; margin: 10px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .result { margin: 10px 0; padding: 10px; border-left: 4px solid #007bff; background: #f0f8ff; }
+    </style>
+</head>
+<body>
+    <h2>System Test</h2>
+    
+    <button class="test-button" onclick="testQueueManager()">Test Queue Manager</button>
+    <button class="test-button" onclick="testStorageManager()">Test Storage Manager</button>
+    <button class="test-button" onclick="testAdminSession()">Test Admin Session</button>
+    <button class="test-button" onclick="clearAllData()">Clear All Data</button>
+    
+    <div id="results"></div>
+    
+    <script src="queue-manager.js"></script>
+    <script src="auth.js"></script>
+    <script src="admin-auth.js"></script>
+    
+    <script>
+        function addResult(text, type = 'info') {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = 'result';
+            div.style.borderLeftColor = type === 'error' ? '#dc3545' : (type === 'success' ? '#28a745' : '#007bff');
+            div.textContent = text;
+            results.appendChild(div);
+        }
+        
+        function testQueueManager() {
+            try {
+                addResult('QueueManager available: ' + (typeof QueueManager !== 'undefined'), 'success');
+                addResult('Current queue length: ' + QueueManager.getQueue().length);
+            } catch (e) {
+                addResult('QueueManager error: ' + e.message, 'error');
+            }
+        }
+        
+        function testStorageManager() {
+            try {
+                addResult('StorageManager available: ' + (typeof StorageManager !== 'undefined'), 'success');
+                addResult('Current users count: ' + StorageManager.getUsers().length);
+            } catch (e) {
+                addResult('StorageManager error: ' + e.message, 'error');
+            }
+        }
+        
+        function testAdminSession() {
+            try {
+                addResult('AdminSession available: ' + (typeof AdminSession !== 'undefined'), 'success');
+                addResult('Admin authenticated: ' + AdminSession.isAuthenticated());
+            } catch (e) {
+                addResult('AdminSession error: ' + e.message, 'error');
+            }
+        }
+        
+        function clearAllData() {
+            localStorage.clear();
+            addResult('All localStorage data cleared', 'success');
+        }
+    </script>
+</body>
+</html>

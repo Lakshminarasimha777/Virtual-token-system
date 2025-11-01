@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Fee Payment Queue</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Student Dashboard</h1>
+            <div class="user-info">
+                <span id="welcomeMessage">Welcome, Student!</span>
+                <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+            </div>
+        </header>
+        
+        <main class="dashboard-content">
+            <div class="dashboard-card">
+                <h2>Fee Payment Request</h2>
+                
+                <div id="noTokenSection" class="section">
+                    <p>You haven't requested a fee payment token yet.</p>
+                    <button id="requestTokenBtn" class="btn btn-primary">Request Fee Payment Token</button>
+                </div>
+                
+                <div id="tokenSection" class="section hidden">
+                    <div class="token-display">
+                        <h3>Your Token Details</h3>
+                        <div class="token-info">
+                            <div class="token-number">
+                                <span class="label">Token Number:</span>
+                                <span id="tokenNumber" class="token-value">#0</span>
+                            </div>
+                            <div class="token-status">
+                                <span class="label">Status:</span>
+                                <span id="tokenStatus" class="status-badge">Pending</span>
+                            </div>
+                        </div>
+                        <div class="queue-info">
+                            <p id="queuePosition">You are currently in the queue</p>
+                            <div id="queueUpdates" class="queue-updates">
+                                <!-- Real-time position updates will appear here -->
+                            </div>
+                        </div>
+                        <button id="cancelTokenBtn" class="btn btn-danger">Cancel Token</button>
+                    </div>
+                </div>
+                
+                <div id="notificationSection" class="notification-area">
+                    <!-- Dynamic notifications will appear here -->
+                </div>
+            </div>
+            
+            <div class="dashboard-card">
+                <h3>Instructions</h3>
+                <ol>
+                    <li>Click "Request Fee Payment Token" to get your queue number</li>
+                    <li>Wait for admin notification when it's your turn</li>
+                    <li>Proceed to the cashier when notified</li>
+                    <li>Complete your fee payment</li>
+                </ol>
+            </div>
+        </main>
+    </div>
+    
+    <script src="queue-manager.js"></script>
+    <script src="auth.js"></script>
+    <script src="user-dashboard.js"></script>
+</body>
+</html>
