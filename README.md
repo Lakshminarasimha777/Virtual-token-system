@@ -168,14 +168,4 @@ setInterval(() => {
 - Queue analytics and reporting
 - Mobile app version
 - Database backend integration
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
-
----
-
-**Created**: November 2025  
-**Technologies**: HTML5, CSS3, Vanilla JavaScript  
-**Storage**: Browser localStorage  
-**Author**: Fee Payment Queue Management System
+  ![pexels-pixabay-414144](https://github.com/user-attachments/assets/429aa6d9-48a8-41eb-b22f-38617cd286d4)
