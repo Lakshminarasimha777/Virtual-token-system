@@ -168,4 +168,4 @@ setInterval(() => {
 - Queue analytics and reporting
 - Mobile app version
 - Database backend integration
-  ![pexels-pixabay-414144](https://github.com/user-attachments/assets/429aa6d9-48a8-41eb-b22f-38617cd286d4)
+
